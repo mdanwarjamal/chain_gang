@@ -13,6 +13,7 @@
       <p>We will deliver it to your door and let you try it before you buy it.</p>
     </div>
 
+    <h2>From CSV File</h2>
     <table id="inventory">
       <tr>
         <th>Brand</th>
@@ -48,6 +49,62 @@ $bike_array = $parser->parse();
       <?php } ?>
 
     </table>
+    <?php
+      // $sql = "SELECT * FROM bicycles";
+      // $result = $database->query($sql);
+      // $row = $result->fetch_assoc();
+      // $result->free();
+      // echo "Brand from DB: " . $row['brand'];
+    ?>
+    <hr />
+    <h2>From Database</h2>
+    <table id="inventory">
+      <tr>
+        <th>Brand</th>
+        <th>Model</th>
+        <th>Year</th>
+        <th>Category</th>
+        <th>Gender</th>
+        <th>Color</th>
+        <th>Weight</th>
+        <th>Condition</th>
+        <th>Price</th>
+      </tr>
+
+      <?php
+
+        $sql = "SELECT * FROM bicycles";
+        $result = $database->query($sql);
+        // $row = $result->fetch_assoc();
+        // $result->free();
+        // echo "Brand from DB: " . $row['brand'];
+
+      ?>
+      <?php while($row = $result->fetch_assoc()): ?>
+        <?php $bike = new Bicycle($row); ?>
+        <tr>
+          <td><?php echo h($bike->brand); ?></td>
+          <td><?php echo h($bike->model); ?></td>
+          <td><?php echo h($bike->year); ?></td>
+          <td><?php echo h($bike->category); ?></td>
+          <td><?php echo h($bike->gender); ?></td>
+          <td><?php echo h($bike->color); ?></td>
+          <td><?php echo h($bike->weight_kg()) . ' / ' . h($bike->weight_lbs()); ?></td>
+          <td><?php echo h($bike->condition()); ?></td>
+          <td><?php echo h(money_format('$%i', $bike->price)); ?></td>
+        </tr>
+      <?php endwhile; ?>
+      <?php
+
+        // $sql = "SELECT * FROM bicycles";
+        // $result = $database->query($sql);
+        // $row = $result->fetch_assoc();
+        $result->free();
+        // echo "Brand from DB: " . $row['brand'];
+
+      ?>
+    </table>
+
   </div>
 
 </div>
