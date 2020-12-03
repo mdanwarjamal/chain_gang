@@ -1,7 +1,12 @@
 <?php
 
 class Bicycle {
-
+  //START: Active Database Design Pattern
+  public static $database;
+  public static function set_database($database){
+    self::$database = $database;
+  }
+  //END: Active Database Design Pattern
   public $brand;
   public $model;
   public $year;
