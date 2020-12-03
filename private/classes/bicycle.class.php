@@ -8,11 +8,28 @@ class Bicycle {
   }
   public static function find_by_sql($sql){
     $result = self::$database->query($sql);
-    return $result;
+    $object_array = [];
+    while($record = $result->fetch_assoc()){
+      $object = self::instantiate($record);
+      $object_array[] = $object;
+    }
+    $result->free();
+    //$object = self::instantiate($result);
+    //$object_array[] = $object;
+    return $object_array;
   }
   public static function find_all(){
     $sql = "SELECT * FROM bicycles";
     return self::find_by_sql($sql);
+  }
+  protected static function instantiate($record){
+    $object = new self;
+    foreach ($record as $property => $value) {
+      if(property_exists($object,$property)){
+        $object->$property = $value;
+      }
+    }
+    return $object;
   }
   //END: Active Database Design Pattern
   public $brand;
