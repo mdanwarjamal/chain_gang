@@ -24,7 +24,7 @@
   define("WWW_ROOT", $doc_root);
 
   require_once('functions.php');
-
+  require_once 'db_credentials.php';
   // Load class definitions manually
 
   // -> Individually
