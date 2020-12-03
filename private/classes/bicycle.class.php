@@ -2,9 +2,17 @@
 
 class Bicycle {
   //START: Active Database Design Pattern
-  public static $database;
+  protected static $database;
   public static function set_database($database){
     self::$database = $database;
+  }
+  public static function find_by_sql($sql){
+    $result = self::$database->query($sql);
+    return $result;
+  }
+  public static function find_all(){
+    $sql = "SELECT * FROM bicycles";
+    return self::find_by_sql($sql);
   }
   //END: Active Database Design Pattern
   public $brand;
