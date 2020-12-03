@@ -22,6 +22,16 @@ class Bicycle {
     $sql = "SELECT * FROM bicycles";
     return self::find_by_sql($sql);
   }
+  public static function find_by_id($id){
+    $sql = "SELECT * FROM bicycles ";
+    $sql .= "WHERE id='" . self::$database->escape_string($id) . "'";
+    $object_array = self::find_by_sql($sql);
+    if(!empty($object_array)){
+      return array_shift($object_array);
+    }else{
+      return false;
+    }
+  }
   protected static function instantiate($record){
     $object = new self;
     foreach ($record as $property => $value) {
@@ -32,6 +42,7 @@ class Bicycle {
     return $object;
   }
   //END: Active Database Design Pattern
+  public $id;
   public $brand;
   public $model;
   public $year;

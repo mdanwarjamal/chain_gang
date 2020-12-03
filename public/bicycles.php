@@ -111,6 +111,7 @@
     <h2>From Active Database Design Pattern</h2>-->
     <table id="inventory">
       <tr>
+        <th>ID</th>
         <th>Brand</th>
         <th>Model</th>
         <th>Year</th>
