@@ -99,7 +99,7 @@ class Bicycle {
   public $gender;
   public $price;
   protected $weight_kg;
-  protected $condition_id;
+  public $condition_id;
 
   public const CATEGORIES = ['Road', 'Mountain', 'Hybrid', 'Cruiser', 'City', 'BMX'];
 
