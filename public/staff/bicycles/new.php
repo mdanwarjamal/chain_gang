@@ -19,7 +19,7 @@ if(is_post_request()) {
 
   $bicycle = new Bicycle($args);
 
-  $result = $bicycle->create();
+  $result = $bicycle->save();
 
   if($result === true) {
     $new_id = $bicycle->id;

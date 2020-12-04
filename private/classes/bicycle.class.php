@@ -73,6 +73,34 @@ class Bicycle {
     }
     return  $result;
   }
+  public function update(){
+    $attributes = $this->sanitized_attributes();
+    $attribute_pairs = [];
+    foreach ($attributes as $key => $value) {
+      $attribute_pairs[] = "{$key}='{$value}'";
+    }
+    $sql = "UPDATE bicycles SET ";
+    $sql .= join(', ',$attribute_pairs);
+    $sql .= " WHERE id='" . self::$database->escape_string($this->id) . "' ";
+    $sql .= "LIMIT 1";
+
+    $result = self::$database->query($sql);
+    return $result;
+  }
+  public function save(){
+    if(!isset($this->id)){
+      return $this->create();
+    }else{
+      return $this->update();
+    }
+  }
+  public function merge_attributes($args){
+    foreach ($args as $key => $value) {
+      if(property_exists($this,$key) && !is_null($value)){
+        $this->$key = $value;
+      }
+    }
+  }
   public function attributes(){
     $attributes = [];
     foreach (self::$db_columns as $column) {
