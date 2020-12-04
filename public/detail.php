@@ -1,22 +1,13 @@
 <?php require_once('../private/initialize.php'); ?>
-
 <?php
-
-  // Get requested ID
   $id = $_GET['id'] ?? 1;
-  // Find bicycle using ID
   $bike = Bicycle::find_by_id($id);
 ?>
-
 <?php $page_title = 'Detail'; ?>
 <?php include(SHARED_PATH . '/public_header.php'); ?>
-
 <div id="main">
-
   <a href="bicycles.php">Back to Inventory</a>
-
   <div id="page">
-
     <div class="detail">
       <dl>
         <dt>Brand</dt>
@@ -59,9 +50,6 @@
         <dd><?php echo h($bike->description); ?></dd>
       </dl>
     </div>
-
   </div>
-
 </div>
-
 <?php include(SHARED_PATH . '/public_footer.php'); ?>
