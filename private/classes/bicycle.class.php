@@ -3,6 +3,7 @@
 class Bicycle {
   //START: Active Database Design Pattern
   protected static $database;
+  protected static $db_columns = ['id','brand', 'model', 'year', 'category', 'color', 'description', 'gender', 'price', 'weight_kg', 'condition_id'];
   public static function set_database($database){
     self::$database = $database;
   }
@@ -42,7 +43,7 @@ class Bicycle {
     return $object;
   }
   public function create(){
-    $sql = "INSERT INTO bicycles (";
+    /*$sql = "INSERT INTO bicycles (";
     $sql .= "brand, model, year, category, color, description, gender, price, weight_kg, condition_id";
     $sql .= ") VALUES (";
       $sql .= "'" . self::$database->escape_string($this->brand) . "', ";
@@ -55,7 +56,15 @@ class Bicycle {
       $sql .= "'" . self::$database->escape_string($this->price) . "', ";
       $sql .= "'" . self::$database->escape_string($this->weight_kg) . "', ";
       $sql .= "'" . self::$database->escape_string($this->condition_id) . "'";
-    $sql .= ")";
+    $sql .= ")";*/
+
+    //version 2
+    $attributes = $this->attributes();
+    $sql = "INSERT INTO bicycles (";
+    $sql .= join(', ', array_keys($attributes));
+    $sql .= ") VALUES ('";
+    $sql .= join("', '", array_values($attributes));
+    $sql .= "')";
 
     $result = self::$database->query($sql);
 
@@ -64,7 +73,14 @@ class Bicycle {
     }
     return  $result;
   }
-
+  public function attributes(){
+    $attributes = [];
+    foreach (self::$db_columns as $column) {
+      if($column == "id") { continue; }
+      $attributes[$column] = $this->$column;
+    }
+    return $attributes;
+  }
   //END: Active Database Design Pattern
   public $id;
   public $brand;
