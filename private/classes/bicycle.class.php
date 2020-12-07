@@ -4,6 +4,7 @@ class Bicycle {
   //START: Active Database Design Pattern
   protected static $database;
   protected static $db_columns = ['id','brand', 'model', 'year', 'category', 'color', 'description', 'gender', 'price', 'weight_kg', 'condition_id'];
+  public $errors = [];
   public static function set_database($database){
     self::$database = $database;
   }
@@ -42,6 +43,17 @@ class Bicycle {
     }
     return $object;
   }
+  public function validate(){
+    $this->errors = [];
+    if(is_blank($this->brand)) {
+      $this->errors[] = "Brand cannot be blank";
+    }
+    if(is_blank($this->model)) {
+      $this->errors[] = "Model cannot be blank";
+    }
+    
+    return $this->errors;
+  }
   public function create(){
     /*$sql = "INSERT INTO bicycles (";
     $sql .= "brand, model, year, category, color, description, gender, price, weight_kg, condition_id";
@@ -59,6 +71,9 @@ class Bicycle {
     $sql .= ")";*/
 
     //version 2
+    $this->validate();
+    if(!empty($this->errors)) { return false; }
+
     $attributes = $this->sanitized_attributes();
     $sql = "INSERT INTO bicycles (";
     $sql .= join(', ', array_keys($attributes));
@@ -74,6 +89,9 @@ class Bicycle {
     return  $result;
   }
   public function update(){
+    $this->validate();
+    if(!empty($this->errors)) { return false; }
+
     $attributes = $this->sanitized_attributes();
     $attribute_pairs = [];
     foreach ($attributes as $key => $value) {
@@ -126,7 +144,7 @@ class Bicycle {
   public $description;
   public $gender;
   public $price;
-  protected $weight_kg;
+  public $weight_kg;
   public $condition_id;
 
   public const CATEGORIES = ['Road', 'Mountain', 'Hybrid', 'Cruiser', 'City', 'BMX'];

@@ -72,7 +72,7 @@ if(!isset($bicycle)) {
 
 <dl>
   <dt>Weight (kg)</dt>
-  <dd><input type="text" name="bicycle[weight_kg]" value="<?php echo h($bicycle->weight_kg()); ?>" /></dd>
+  <dd><input type="text" name="bicycle[weight_kg]" value="<?php echo h($bicycle->weight_kg); ?>" /></dd>
 </dl>
 
 <dl>
