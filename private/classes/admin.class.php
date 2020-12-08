@@ -9,17 +9,18 @@
     public $last_name;
     public $email;
     public $username;
-    public $hashed_password;
+    protected $hashed_password;
+    public $password;
+    public $confirm_password;
     //public $password;
 
     public function __construct($args=[]) {
-      //$this->brand = isset($args['brand']) ? $args['brand'] : '';
       $this->first_name = $args['first_name'] ?? '';
       $this->last_name = $args['last_name'] ?? '';
       $this->email = $args['email'] ?? '';
       $this->username = $args['username'] ?? '';
-      $this->hashed_password = $args['hashed_password'] ?? '';
-      //$this->password = $args['password'] ?? '';
+      $this->password = $args['password'] ?? '';
+      $this->confirm_password = $args['confirm_password'] ?? '';
     }
 
     public function name() {

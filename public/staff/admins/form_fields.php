@@ -28,5 +28,10 @@ if(!isset($admin)) {
 
 <dl>
   <dt>Password</dt>
-  <dd><input type="password" name="admin[hashed_password]" value="<?php echo h($admin->hashed_password); ?>" /></dd>
+  <dd><input type="password" name="admin[password]" value="<?php echo h($admin->password); ?>" /></dd>
+</dl>
+
+<dl>
+  <dt>Confirm Password</dt>
+  <dd><input type="password" name="admin[confirm_password]" value="<?php echo h($admin->confirm_password); ?>" /></dd>
 </dl>
