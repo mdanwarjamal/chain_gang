@@ -1,146 +1,9 @@
 <?php
 
-class Bicycle {
+class Bicycle extends DatabaseObject {
   //START: Active Database Design Pattern
-  protected static $database;
   protected static $db_columns = ['id','brand', 'model', 'year', 'category', 'color', 'description', 'gender', 'price', 'weight_kg', 'condition_id'];
-  public $errors = [];
-  public static function set_database($database){
-    self::$database = $database;
-  }
-  public static function find_by_sql($sql){
-    $result = self::$database->query($sql);
-    $object_array = [];
-    while($record = $result->fetch_assoc()){
-      $object = self::instantiate($record);
-      $object_array[] = $object;
-    }
-    $result->free();
-    //$object = self::instantiate($result);
-    //$object_array[] = $object;
-    return $object_array;
-  }
-  public static function find_all(){
-    $sql = "SELECT * FROM bicycles";
-    return self::find_by_sql($sql);
-  }
-  public static function find_by_id($id){
-    $sql = "SELECT * FROM bicycles ";
-    $sql .= "WHERE id='" . self::$database->escape_string($id) . "'";
-    $object_array = self::find_by_sql($sql);
-    if(!empty($object_array)){
-      return array_shift($object_array);
-    }else{
-      return false;
-    }
-  }
-  protected static function instantiate($record){
-    $object = new self;
-    foreach ($record as $property => $value) {
-      if(property_exists($object,$property)){
-        $object->$property = $value;
-      }
-    }
-    return $object;
-  }
-  public function validate(){
-    $this->errors = [];
-    if(is_blank($this->brand)) {
-      $this->errors[] = "Brand cannot be blank";
-    }
-    if(is_blank($this->model)) {
-      $this->errors[] = "Model cannot be blank";
-    }
-
-    return $this->errors;
-  }
-  public function create(){
-    /*$sql = "INSERT INTO bicycles (";
-    $sql .= "brand, model, year, category, color, description, gender, price, weight_kg, condition_id";
-    $sql .= ") VALUES (";
-      $sql .= "'" . self::$database->escape_string($this->brand) . "', ";
-      $sql .= "'" . self::$database->escape_string($this->model) . "', ";
-      $sql .= "'" . self::$database->escape_string($this->year) . "', ";
-      $sql .= "'" . self::$database->escape_string($this->category) . "', ";
-      $sql .= "'" . self::$database->escape_string($this->color) . "', ";
-      $sql .= "'" . self::$database->escape_string($this->description) . "', ";
-      $sql .= "'" . self::$database->escape_string($this->gender) . "', ";
-      $sql .= "'" . self::$database->escape_string($this->price) . "', ";
-      $sql .= "'" . self::$database->escape_string($this->weight_kg) . "', ";
-      $sql .= "'" . self::$database->escape_string($this->condition_id) . "'";
-    $sql .= ")";*/
-
-    //version 2
-    $this->validate();
-    if(!empty($this->errors)) { return false; }
-
-    $attributes = $this->sanitized_attributes();
-    $sql = "INSERT INTO bicycles (";
-    $sql .= join(', ', array_keys($attributes));
-    $sql .= ") VALUES ('";
-    $sql .= join("', '", array_values($attributes));
-    $sql .= "')";
-
-    $result = self::$database->query($sql);
-
-    if($result){
-      $this->id = self::$database->insert_id;
-    }
-    return  $result;
-  }
-  public function update(){
-    $this->validate();
-    if(!empty($this->errors)) { return false; }
-
-    $attributes = $this->sanitized_attributes();
-    $attribute_pairs = [];
-    foreach ($attributes as $key => $value) {
-      $attribute_pairs[] = "{$key}='{$value}'";
-    }
-    $sql = "UPDATE bicycles SET ";
-    $sql .= join(', ',$attribute_pairs);
-    $sql .= " WHERE id='" . self::$database->escape_string($this->id) . "' ";
-    $sql .= "LIMIT 1";
-
-    $result = self::$database->query($sql);
-    return $result;
-  }
-  public function save(){
-    if(!isset($this->id)){
-      return $this->create();
-    }else{
-      return $this->update();
-    }
-  }
-  public function delete(){
-    $sql = "DELETE FROM bicycles ";
-    $sql .= "WHERE id='" . self::$database->escape_string($this->id)  . "' ";
-    $sql .= "LIMIT 1";
-    $result = self::$database->query($sql);
-    return $result;
-  }
-  public function merge_attributes($args){
-    foreach ($args as $key => $value) {
-      if(property_exists($this,$key) && !is_null($value)){
-        $this->$key = $value;
-      }
-    }
-  }
-  public function attributes(){
-    $attributes = [];
-    foreach (self::$db_columns as $column) {
-      if($column == "id") { continue; }
-      $attributes[$column] = $this->$column;
-    }
-    return $attributes;
-  }
-  protected function sanitized_attributes(){
-    $sanitized =[];
-    foreach ($this->attributes() as $key => $value) {
-      $sanitized[$key] = self::$database->escape_string($value);
-    }
-    return $sanitized;
-  }
+  protected static $table_name = 'bicycles';
   //END: Active Database Design Pattern
   public $id;
   public $brand;
@@ -186,9 +49,11 @@ class Bicycle {
     //   }
     // }
   }
+
   public function name() {
     return "{$this->brand} {$this->model} {$this->year}";
   }
+
   public function weight_kg() {
     return number_format($this->weight_kg, 2) . ' kg';
   }
@@ -212,6 +77,18 @@ class Bicycle {
     } else {
       return "Unknown";
     }
+  }
+
+  public function validate(){
+    $this->errors = [];
+    if(is_blank($this->brand)) {
+      $this->errors[] = "Brand cannot be blank";
+    }
+    if(is_blank($this->model)) {
+      $this->errors[] = "Model cannot be blank";
+    }
+
+    return $this->errors;
   }
 
 }
