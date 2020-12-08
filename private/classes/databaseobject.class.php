@@ -45,7 +45,7 @@
       }
       return $object;
     }
-    public function validate(){
+    protected function validate(){
       $this->errors = [];
 
       //Placeholder
