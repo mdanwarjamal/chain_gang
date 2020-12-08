@@ -51,7 +51,7 @@ class Bicycle {
     if(is_blank($this->model)) {
       $this->errors[] = "Model cannot be blank";
     }
-    
+
     return $this->errors;
   }
   public function create(){
@@ -111,6 +111,13 @@ class Bicycle {
     }else{
       return $this->update();
     }
+  }
+  public function delete(){
+    $sql = "DELETE FROM bicycles ";
+    $sql .= "WHERE id='" . self::$database->escape_string($this->id)  . "' ";
+    $sql .= "LIMIT 1";
+    $result = self::$database->query($sql);
+    return $result;
   }
   public function merge_attributes($args){
     foreach ($args as $key => $value) {
