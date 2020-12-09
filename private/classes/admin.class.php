@@ -111,5 +111,9 @@
         return false;
       }
     }
+
+    public function verify_password($password){
+      return password_verify($password,$this->hashed_password);
+    }
   }
 ?>
