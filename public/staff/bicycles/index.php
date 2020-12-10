@@ -1,10 +1,12 @@
 <?php require_once('../../../private/initialize.php'); ?>
-
 <?php
-  
+  require_login();
+?>
+<?php
+
 // Find all bicycles;
 $bicycles = Bicycle::find_all();
-  
+
 ?>
 <?php $page_title = 'Bicycles'; ?>
 <?php include(SHARED_PATH . '/staff_header.php'); ?>
