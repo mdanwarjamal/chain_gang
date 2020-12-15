@@ -60,7 +60,10 @@ $bicycles = Bicycle::find_by_sql($sql);
     	  </tr>
       <?php } ?>
   	</table>
-
+    <?php
+      $url = url_for('/staff/bicycles/index.php');
+      echo $pagination->page_links($url);
+    ?>
   </div>
 
 </div>
